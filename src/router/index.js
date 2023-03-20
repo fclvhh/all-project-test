@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MainLayout from "../views/MainLayout";
-
+import MainLayout from "../views/MainLayout"
+import Login from "../views/login/Login"
 
 Vue.use(VueRouter)
 
@@ -9,7 +9,14 @@ const routes = [
   {
     path: '/',
     name:'MainLayout',
-    component: MainLayout
+    component: MainLayout,
+    children:[
+      {
+        path:'',
+        name:'Login',
+        component:Login
+      }
+    ]
   },
 
 

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    我是layout
     <router-view></router-view>
   </div>
 </template>
@@ -12,5 +11,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+ .container {
+   min-width: 960px;
+ }
 </style>
