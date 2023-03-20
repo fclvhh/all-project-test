@@ -9,16 +9,13 @@ const routes = [
   {
     path: '/',
     name:'MainLayout',
-    component: MainLayout,
-    children:[
-      {
-        path:'',
-        name:'Login',
-        component:Login
-      }
-    ]
+    component: MainLayout
   },
-
+  {
+    path:'/login',
+    name:'Login',
+    component:Login
+  }
 
 
 ]

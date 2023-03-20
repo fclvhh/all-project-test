@@ -6,15 +6,15 @@
           UNI-ADMIN
         </div>
         <div class="card-body">
-         <el-form ref="loginForm" :model="loginForm">
-           <el-form-item>
-              <el-input v-model="loginForm.form" placeholder="请输入用户名"></el-input>
+         <el-form ref="loginForm" :model="loginForm" :rules="rules">
+           <el-form-item  prop="username">
+              <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
            </el-form-item>
-           <el-form-item>
+           <el-form-item  prop="password">
              <el-input v-model="loginForm.password" placeholder="请输入密码" show-password ></el-input>
            </el-form-item>
            <el-form-item>
-                <el-button  class="bg-info w-100 text-white">登陆</el-button>
+                <el-button class="bg-info w-100 text-white" @click="submit">登陆</el-button>
            </el-form-item>
           </el-form>
         </div>
@@ -31,7 +31,25 @@ export default {
       loginForm:{
         username:'',
         password:''
+      },
+      rules:{
+        username: [
+          {required:true,message:'请输入用户名',trigger:'blur'}
+        ],
+        password: [
+          {required:true,message:'请输入密码',trigger:'blur'}
+        ]
       }
+    }
+  },
+  methods:{
+    submit() {
+      this.$refs.loginForm.validate((valid)=>{
+         if (valid) {
+           this.$router.push({name:"MainLayout"})
+         }
+          return false
+      })
     }
   }
 }
