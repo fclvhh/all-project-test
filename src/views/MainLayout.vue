@@ -13,7 +13,7 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-          <el-menu-item v-for="(item,index) in navData.list" :key="index"  :index="(index+1)|numToString">{{ item.bar }}
+          <el-menu-item v-for="(item,index) in navData.list" :key="index" :index="(index+1)|numToString">{{ item.bar }}
           </el-menu-item>
 
           <el-submenu index="6">
@@ -29,6 +29,7 @@
       </nav>
     </header>
     <main class="flex">
+
       <aside style="width: 180px;height: calc(100vh - 60px);overflow: auto;"
              class="border-0"
       >
@@ -38,7 +39,7 @@
             class="el-menu-vertical-demo "
             active-text-color="#ffd04b"
             style="height: calc(100vh - 60px)"
-           >
+        >
           <el-menu-item :index="(index+1)|numToString" v-for="(item,index) in navData.list[cIndex].children.list"
                         :key="index">
             <i :class="item.icon"></i>
@@ -47,20 +48,38 @@
 
         </el-menu>
       </aside>
-      <article style="height: calc(100vh - 60px);overflow: hidden;" class="grow-1">
-      <!--面包屑-->
-        <el-breadcrumb separator-class="el-icon-arrow-right" style="padding: 15px 5px; position: fixed;" >
-          <el-breadcrumb-item  v-for="(item,index) in breadCrumbList" :key="index" :to="item.path">
-            {{item.meta.navTitle}}
+      <article style="height: calc(100vh - 60px);overflow: auto;" class="grow-1 article bg-light">
+        <!--面包屑-->
+        <el-breadcrumb separator-class="el-icon-arrow-right" style="padding: 15px 5px; position: fixed; z-index: 100;"
+                       class="bg-white w-100"
+        >
+
+          <el-breadcrumb-item v-for="(item,index) in breadCrumbList" :key="index" :to="item.path">
+            {{ item.meta.navTitle }}
           </el-breadcrumb-item>
 
         </el-breadcrumb>
-        <el-divider class="m-0"></el-divider>
-        <section style="overflow: auto" class="mt-5 w-100 h-100">
+
+        <section class="mt-5">
+
           <none>
             <router-view></router-view>
           </none>
-
+          <el-backtop target=".article" :bottom="100">
+            <div
+                style="
+                    height: 100%;
+                    width: 100%;
+                    background-color: #f2f5f6;
+                    box-shadow: 0 0 6px rgba(0,0,0, .12);
+                    text-align: center;
+                    line-height: 40px;
+                    color: #1989fa;
+                  "
+            >
+              UP
+            </div>
+          </el-backtop>
         </section>
       </article>
     </main>
@@ -75,7 +94,7 @@ export default {
   data() {
     return {
       asideListIndex: '1',
-      crumbCache:[],
+      crumbCache: [],
       navData: {
         active: '1',
         list: [
@@ -87,7 +106,7 @@ export default {
                 {
                   asideBar: '后台首页',
                   icon: 'el-icon-s-home',
-                  name:"HomeIndex"
+                  name: "HomeIndex"
                 },
                 {
                   asideBar: '相册管理',
@@ -143,9 +162,9 @@ export default {
       console.log(key, keyPath);
       this.asideListIndex = key
     },
-    handleAsideSelect(a,b) {
-     let name = this.navData.list[this.asideListIndex-1].children.list[a-1].name;
-      this.$router.push({name:`${name}`})
+    handleAsideSelect(a, b) {
+      let name = this.navData.list[this.asideListIndex - 1].children.list[a - 1].name;
+      this.$router.push({name: `${name}`})
     },
   },
   computed: {
@@ -164,7 +183,7 @@ export default {
   },
   watch: {
     $route(to) {
-     // this.$router.push({name:`${to.name}`})
+      // this.$router.push({name:`${to.name}`})
       console.log(this.$route.matched)
     }
   },
@@ -188,5 +207,32 @@ export default {
 
 .grow-1 {
   flex-grow: 1;
+}
+
+.father {
+  position: relative;
+
+  & > .son {
+    position: absolute;
+
+    &.p-vc {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &.p-c {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &.p-center {
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+
+      transform: translateY(-50%);
+    }
+  }
+
 }
 </style>
