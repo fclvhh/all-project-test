@@ -1,26 +1,25 @@
 <template>
   <div class="wrapper">
-    <header style="height: 60px;background-color: #545c64;" class=" flex sp-bt" >
-      <div class="logo text-white"  style="width: 150px;font-size: 20px; padding: 15px 22px;" >
+    <header style="height: 60px;background-color: #545c64;" class=" flex sp-bt">
+      <div class="logo text-white" style="width: 150px;font-size: 20px; padding: 15px 22px;">
         UNI-ADMIN
       </div>
-      <nav style="width:510px;" >
+      <nav style="width:510px;">
         <el-menu
-            :default-active="activeIndex2"
+            :default-active="navData.active"
             class="el-menu-demo p-0"
             mode="horizontal"
             @select="handleSelect"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-          <el-menu-item index="1">首页</el-menu-item>
-          <el-menu-item index="2">商品</el-menu-item>
-          <el-menu-item index="3">订单</el-menu-item>
-          <el-menu-item index="4">会员</el-menu-item>
-          <el-menu-item index="5">设置</el-menu-item>
+          <el-menu-item v-for="(item,index) in navData.list" :key="index"  :index="(index+1)|numToString">{{ item.bar }}
+          </el-menu-item>
+
           <el-submenu index="6">
             <template slot="title">
-              <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+              <el-avatar size="small"
+                         src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
               summer
             </template>
             <el-menu-item index="6-1">修改</el-menu-item>
@@ -29,77 +28,165 @@
         </el-menu>
       </nav>
     </header>
-   <main class="flex">
-     <aside style="width: 180px;height: calc(100vh - 60px);overflow: auto"
-            >
-       <el-menu
-           default-active="2"
-           class="el-menu-vertical-demo"
-           @open="handleOpen"
-           @close="handleClose">
-         <el-menu-item index="1">
-             <i class="el-icon-s-home"></i>
-             <span>后台首页</span>
-         </el-menu-item>
-         <el-menu-item index="2">
-           <i class="el-icon-picture"></i>
-           <span slot="title">相册管理</span>
-         </el-menu-item>
-         <el-menu-item index="3" >
-           <i class="el-icon-s-management"></i>
-           <span slot="title">商品列表</span>
-         </el-menu-item>
-         <el-menu-item index="4">
-           <i class="el-icon-bangzhu"></i>
-           <span slot="title">商品规格</span>
-         </el-menu-item>
-       </el-menu>
-     </aside>
+    <main class="flex">
+      <aside style="width: 180px;height: calc(100vh - 60px);overflow: auto;"
+             class="border-0"
+      >
+        <el-menu
+            @select="handleAsideSelect"
+            :default-active="navData.list[cIndex].children.active"
+            class="el-menu-vertical-demo "
+            active-text-color="#ffd04b"
+            style="height: calc(100vh - 60px)"
+           >
+          <el-menu-item :index="(index+1)|numToString" v-for="(item,index) in navData.list[cIndex].children.list"
+                        :key="index">
+            <i :class="item.icon"></i>
+            <span>{{ item.asideBar }}</span>
+          </el-menu-item>
 
-     <article style="height: calc(100vh - 60px);"  class="grow-1 bg-danger">
-       <section>
-         <router-view></router-view>
-       </section>
-     </article>
-   </main>
+        </el-menu>
+      </aside>
+      <article style="height: calc(100vh - 60px);overflow: hidden;" class="grow-1">
+      <!--面包屑-->
+        <el-breadcrumb separator-class="el-icon-arrow-right" style="padding: 15px 5px; position: fixed;" >
+          <el-breadcrumb-item  v-for="(item,index) in breadCrumbList" :key="index" :to="item.path">
+            {{item.meta.navTitle}}
+          </el-breadcrumb-item>
+
+        </el-breadcrumb>
+        <el-divider class="m-0"></el-divider>
+        <section style="overflow: auto" class="mt-5 w-100 h-100">
+          <none>
+            <router-view></router-view>
+          </none>
+
+        </section>
+      </article>
+    </main>
 
   </div>
 </template>
 
 <script>
+
 export default {
   name: "MainLayout",
   data() {
     return {
-      activeIndex: '1',
-      activeIndex2: '1'
+      asideListIndex: '1',
+      crumbCache:[],
+      navData: {
+        active: '1',
+        list: [
+          {
+            bar: '首页',
+            children: {
+              active: '1',
+              list: [
+                {
+                  asideBar: '后台首页',
+                  icon: 'el-icon-s-home',
+                  name:"HomeIndex"
+                },
+                {
+                  asideBar: '相册管理',
+                  icon: 'el-icon-picture',
+
+                },
+                {
+                  asideBar: '商品列表',
+                  icon: 'el-icon-collection',
+                  name: "GoodsList"
+                },
+                {
+                  asideBar: '商品规格',
+                  icon: 'el-icon-help',
+                }
+              ]
+            }
+          },
+          {
+            bar: '商品',
+            children: {
+              active: '2',
+              list: []
+            }
+          },
+          {
+            bar: '订单',
+            children: {
+              active: '3',
+              list: []
+            }
+          },
+          {
+            bar: '会员',
+            children: {
+              active: '4',
+              list: []
+            }
+          },
+          {
+            bar: '设置',
+            children: {
+              active: '5',
+              list: []
+            }
+          },
+        ]
+      }
     }
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+      this.asideListIndex = key
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    handleAsideSelect(a,b) {
+     let name = this.navData.list[this.asideListIndex-1].children.list[a-1].name;
+      this.$router.push({name:`${name}`})
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+  },
+  computed: {
+    cIndex() {
+      return this.asideListIndex - 1
+    },
+    breadCrumbList() {
+      console.log(this.$route.matched)
+      return this.$route.matched
     }
-  }
+  },
+  filters: {
+    numToString: function (value) {
+      return value.toString();
+    }
+  },
+  watch: {
+    $route(to) {
+     // this.$router.push({name:`${to.name}`})
+      console.log(this.$route.matched)
+    }
+  },
+
+
 }
 </script>
 
 <style scoped lang="scss">
- .wrapper {
-   min-width: 960px;
- }
- .flex {
-   display: flex;
-   &.sp-bt {
-     justify-content: space-between;
-   }
- }
- .grow-1 {
-   flex-grow: 1;
- }
+.wrapper {
+  min-width: 960px;
+}
+
+.flex {
+  display: flex;
+
+  &.sp-bt {
+    justify-content: space-between;
+  }
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
 </style>
