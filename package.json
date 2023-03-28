@@ -28,7 +28,6 @@
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-axios": "0.0.4",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-start-ele": "file:/Users/feicheng/Documents/vue-start-ele",
     "vue-template-compiler": "^2.6.11"
   }
 }

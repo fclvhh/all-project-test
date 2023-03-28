@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <header style="height: 60px;background-color: #545c64;" class=" flex sp-bt">
-      <div class="logo text-white" style="width: 150px;font-size: 20px; padding: 15px 22px;">
+      <div class="logo text-white" style="width: 180px;font-size: 20px; padding: 15px 22px;">
         UNI-ADMIN
       </div>
       <nav style="width:510px;">
