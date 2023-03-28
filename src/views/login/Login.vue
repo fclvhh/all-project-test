@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { getToken } from "../../api/user"
 export default {
   name: "Login",
   data() {
@@ -46,19 +47,7 @@ export default {
      submit() {
         this.$refs.loginForm.validate((valid)=>{
          if (valid) {
-            this.axios.post('/admin/login',{
-             username:this.loginForm.username,
-             password:this.loginForm.password
-           }).then((data)=>{
-             // 1. 拿到token 2. token 存储到vuex 3.token持久化到localstorage 4.设置请求头
-              const token = data.data.data.token
-
-            }).catch((err)=>{
-              console.log(err.response.data);
-            })
-
-
-           // this.$router.push({name:"MainLayout"})
+           getToken(this.loginForm)
          }
           return false
       })
