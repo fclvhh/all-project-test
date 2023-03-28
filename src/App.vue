@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <MainLayout></MainLayout>
+    <MainLayout v-if="path!=='/login'"></MainLayout>
+    <router-view v-else></router-view>
   </div>
 </template>
 
@@ -11,7 +12,15 @@ export default {
   name: 'app',
   components: {
     MainLayout
-  }
+  },
+  mounted() {
+    console.log()
+  },
+  computed: {
+    path() {
+      return this.$route.path
+    }
+  },
 }
 </script>
 
