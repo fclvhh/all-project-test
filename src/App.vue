@@ -7,20 +7,23 @@
 
 <script>
 import MainLayout from "./views/MainLayout";
-
+import { mapMutations } from 'vuex'
 export default {
   name: 'app',
   components: {
     MainLayout
   },
   mounted() {
-    console.log()
+    this.getUserLogin()
   },
   computed: {
     path() {
       return this.$route.path
     }
   },
+  methods:{
+    ...mapMutations('user',['getUserLogin'])
+  }
 }
 </script>
 

@@ -19,11 +19,11 @@
           <el-submenu index="6">
             <template slot="title">
               <el-avatar size="small"
-                         src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
-              summer
+                         :src="user.avatar?user.avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' "></el-avatar>
+              {{user.username}}
             </template>
             <el-menu-item index="6-1">修改</el-menu-item>
-            <el-menu-item index="6-2">推出</el-menu-item>
+            <el-menu-item index="6-2" @click="handleSignOut">推出</el-menu-item>
           </el-submenu>
         </el-menu>
       </nav>
@@ -88,7 +88,8 @@
 </template>
 
 <script>
-
+import { mapState,mapMutations } from "vuex"
+import { signOut }from "@/api/user"
 export default {
   name: "MainLayout",
   data() {
@@ -158,6 +159,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('user',['signOutHandle']),
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       this.asideListIndex = key
@@ -166,8 +168,26 @@ export default {
       let name = this.navData.list[this.asideListIndex - 1].children.list[a - 1].name;
       this.$router.push({name: `${name}`})
     },
+  async handleSignOut() {
+      console.log('退出！');
+       const ret =   await signOut({
+        headers:{
+          token:this.token
+        }
+      })
+      if(ret.errorCode) {
+        this.signOutHandle()
+        console.log('退出失败！');
+        this.$router.push({name:'Login'})
+      }
+      this.signOutHandle()
+      this.$message('推出成功！')
+      this.$router.push({name:"Login"})
+    } 
+  
   },
   computed: {
+    ...mapState('user',['user','token']),
     cIndex() {
       return this.asideListIndex - 1
     },
